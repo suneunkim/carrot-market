@@ -1,4 +1,4 @@
-import Item from "@/components/item";
+import Item from "@/components/home-item";
 import Layout from "@/components/layout";
 
 export default function Bought() {

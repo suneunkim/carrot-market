@@ -1,11 +1,15 @@
+import { UseFormRegisterReturn } from "react-hook-form";
+
 interface InputProps {
   label: string;
   name: string;
   kind?: "text" | "phone" | "price";
+  type: string;
+  register: UseFormRegisterReturn;
   [key: string]: any;
 }
 
-export default function Input({ label, name, kind = "text", ...rest }: InputProps) {
+export default function Input({ label, name, kind = "text", register, ...rest }: InputProps) {
   return (
     <div>
       <label htmlFor={name} className="mb-1 block text-sm font-medium text-gray-700">
@@ -15,6 +19,7 @@ export default function Input({ label, name, kind = "text", ...rest }: InputProp
         <div className="rounded-md shadow-sm flex items-center relative">
           <input
             id={name}
+            {...register}
             {...rest}
             className="appearance-none w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-orange-400 focus:border-orange-400"
           />
@@ -28,6 +33,7 @@ export default function Input({ label, name, kind = "text", ...rest }: InputProp
           </span>
           <input
             id={name}
+            {...register}
             {...rest}
             className="appearance-none w-full px-3 py-2 border-gray-300 rounded-md rounded-l-none shadow-sm focus:outline-none focus:ring-orange-400 focus:border-orange-400"
           />
@@ -41,6 +47,7 @@ export default function Input({ label, name, kind = "text", ...rest }: InputProp
           </div>
           <input
             id={name}
+            {...register}
             {...rest}
             className="appearance-none w-full px-3 py-2 border-gray-300 
           rounded-md shadow-sm focus:outline-none focus:ring-orange-400

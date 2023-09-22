@@ -1,13 +1,31 @@
 import FloatingButton from "@/components/floating-button";
 import Layout from "@/components/layout";
+import { Post, User } from "@prisma/client";
+import { formatDistanceToNow } from "date-fns";
 import Link from "next/link";
+import useSWR, { useSWRConfig } from "swr";
+
+interface PostWithUser extends Post {
+  user: User;
+  _count: {
+    wondering: number;
+    answers: number;
+  };
+}
+
+interface PostResponse {
+  ok: boolean;
+  posts: PostWithUser[];
+}
 
 export default function Community() {
+  const { data } = useSWR<PostResponse>(`/api/posts`);
+
   return (
     <Layout title="동네 생활" hasTabBar>
-      <div className="py-16 px-4 space-y-6">
-        {[...Array(6)].map((_, i) => (
-          <Link href={`/community/${i}`} key={i} className="flex flex-col items-start">
+      <div className="py-3 px-4 space-y-5">
+        {data?.posts?.map((post) => (
+          <Link href={`/community/${post?.id}`} key={post?.id} className="flex flex-col items-start">
             <span
               className="flex items-center px-2.5 py-0.5 rounded-full text-sm
         bg-gray-200 font-medium"
@@ -16,14 +34,14 @@ export default function Community() {
             </span>
             <div className="mt-2 text-gray-800 cursor-pointer ">
               <span className="text-orange-400 font-medium">Q.</span>
-              What is the best mandu restaurant?
+              {post?.question}
             </div>
             <div
               className="mt-5 flex items-center justify-between w-full
          text-gray-500 font-medium"
             >
-              <span>니꼬</span>
-              <span>18시간 전</span>
+              <span>{post?.user?.name}</span>
+              <span>{formatDistanceToNow(new Date(post?.createAt), { addSuffix: true })}</span>
             </div>
             <div className="flex space-x-5 mt-3 text-gray-700 py-2.5 border-t border-b w-full">
               <span className="flex space-x-2 items-center text-sm">
@@ -41,7 +59,7 @@ export default function Community() {
                     d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"
                   ></path>
                 </svg>
-                <span>궁금해요 1</span>
+                <span>궁금해요 {post?._count?.wondering}</span>
               </span>
               <span className="flex space-x-2 items-center text-sm">
                 <svg
@@ -58,7 +76,7 @@ export default function Community() {
                     d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
                   ></path>
                 </svg>
-                <span>답변 1</span>
+                <span>답변 {post?._count?.answers}</span>
               </span>
             </div>
           </Link>

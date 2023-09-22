@@ -1,18 +1,38 @@
 import Layout from "@/components/layout";
 import Link from "next/link";
+import { useRouter } from "next/router";
 
 export default function Profile() {
+  const router = useRouter();
+
+  const onLogout = async () => {
+    const request = await fetch("/api/users/logout", {
+      method: "POST",
+    });
+
+    if (request.status === 200) {
+      router.push("/login");
+    } else {
+      console.log("로그아웃 실패");
+    }
+  };
+
   return (
     <Layout title="나의 정보" hasTabBar>
       <div className="px-4">
-        <div className="flex items-center space-x-5">
-          <div className="w-16 h-16 bg-slate-200 rounded-full" />
-          <div className="flex flex-col">
-            <span className="font-medium text-gray-700">Steve Jebs</span>
-            <Link href="/profile/edit" className="hover:font-semibold transition-all">
-              <span className="text-sm text-gray-700">프로필 수정하기 &rarr;</span>
-            </Link>
+        <div className="flex justify-between">
+          <div className="flex items-center space-x-5">
+            <div className="w-16 h-16 bg-slate-200 rounded-full" />
+            <div className="flex flex-col">
+              <span className="font-medium text-gray-700">Steve Jebs</span>
+              <Link href="/profile/edit" className="hover:font-semibold transition-all">
+                <span className="text-sm text-gray-700">프로필 수정하기 &rarr;</span>
+              </Link>
+            </div>
           </div>
+          <button onClick={onLogout} className="text-sm hover:text-gray-600">
+            로그아웃
+          </button>
         </div>
         <div className="mt-10 flex justify-around">
           <Link href="/profile/sold" className="flex flex-col items-center">
