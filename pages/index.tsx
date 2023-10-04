@@ -5,7 +5,7 @@ import useSWR from "swr";
 import { Item } from "@prisma/client";
 import HomeItem from "@/components/home-item";
 
-interface ProductWithCount extends Item {
+export interface ProductWithCount extends Item {
   _count: {
     favs: number;
   };
