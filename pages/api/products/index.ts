@@ -10,7 +10,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse<ResponseType>) 
       include: {
         _count: {
           select: {
-            Favs: true,
+            favs: true,
           },
         },
       },

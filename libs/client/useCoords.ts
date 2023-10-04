@@ -6,7 +6,7 @@ interface useCoordsState {
 }
 
 export default function useCoords() {
-  const [coords, setCoords] = useState<useCoordsState>({ latitude: null, longitude: null });
+  const [coords, setCoords] = useState<useCoordsState>({ latitude: 0, longitude: 0 });
 
   const onSuccess = ({ coords: { latitude, longitude } }: GeolocationPosition) => {
     setCoords({ latitude, longitude });

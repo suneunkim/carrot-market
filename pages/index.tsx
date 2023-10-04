@@ -7,7 +7,7 @@ import HomeItem from "@/components/home-item";
 
 interface ProductWithCount extends Item {
   _count: {
-    Favs: number;
+    favs: number;
   };
 }
 
@@ -29,7 +29,7 @@ export default function Home() {
             key={product.id}
             title={product.name}
             price={product.price.toLocaleString("ko-KR")}
-            hearts={product._count.Favs}
+            hearts={product._count.favs}
             comments={1}
           />
         ))}
