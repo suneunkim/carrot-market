@@ -127,6 +127,7 @@ export default function Profile() {
                 <div className="flex items-center">
                   {[1, 2, 3, 4, 5].map((star) => (
                     <svg
+                      key={star}
                       className={cls("h-5 w-5", review.score >= star ? "text-yellow-400" : "text-gray-400")}
                       xmlns="http://www.w3.org/2000/svg"
                       viewBox="0 0 20 20"
