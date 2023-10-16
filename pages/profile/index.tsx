@@ -4,7 +4,10 @@ import { cls } from "@/libs/client/utils";
 import { Review, User } from "@prisma/client";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import useSWR, { useSWRConfig } from "swr";
+import useSWR, { SWRConfig } from "swr";
+import { NextPage, NextPageContext } from "next";
+import { withSsrSession } from "@/libs/server/withSession";
+import client from "@/libs/server/client";
 
 interface ReviewWithUser extends Review {
   createBy: User;
@@ -117,6 +120,7 @@ export default function Profile() {
             <span className="text-sm font-medium text-g-700 mt-2">관심목록</span>
           </Link>
         </div>
+        <span>{data?.reviews.length === 0 ? "아직 리뷰가 없습니다" : ""}</span>
         {data?.reviews.map((review) => (
           <div key={review?.id} className="mt-12">
             <div className="flex items-center space-x-4">
@@ -149,3 +153,32 @@ export default function Profile() {
     </Layout>
   );
 }
+
+const Page: NextPage<{ profile: User }> = ({ profile }) => {
+  return (
+    <SWRConfig
+      value={{
+        fallback: {
+          "/api/users/me": { ok: true, profile },
+        },
+      }}
+    >
+      <Profile />
+    </SWRConfig>
+  );
+};
+
+export const getServerSideProps = withSsrSession(async function ({ req }: NextPageContext) {
+  const profile = await client.user.findUnique({
+    where: { id: req?.session.user?.id },
+  });
+  return {
+    props: {
+      profile: JSON.parse(JSON.stringify(profile)),
+    },
+  };
+});
+
+// export default Page;
+
+// withSsrSession로 getServerSideProps 감싸기

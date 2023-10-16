@@ -13,6 +13,8 @@ async function handler(req: NextApiRequest, res: NextApiResponse<ResponseType>) 
       profile,
     });
   }
+  // req.session을 이용해서 DB에 해당 유저 프로필을 요청
+
   if (req.method === "POST") {
     const {
       session: { user },
