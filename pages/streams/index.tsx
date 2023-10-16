@@ -15,7 +15,7 @@ export default function Stream() {
   return (
     <Layout title="라이브" hasTabBar>
       <div className="space-y-3 pb-3">
-        {data?.streams.map((live: any) => (
+        {data?.streams?.map((live) => (
           <div key={live.id} className="py-2 px-4 border-b">
             <Link href={`/streams/${live.id}`}>
               <div className="w-full bg-slate-300 aspect-video rounded-md" />

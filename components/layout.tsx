@@ -1,4 +1,5 @@
 import { cls } from "@/libs/client/utils";
+import Head from "next/head";
 import Link from "next/link";
 import { useRouter } from "next/router";
 
@@ -8,9 +9,10 @@ interface LayoutProps {
   streamBack?: boolean;
   hasTabBar?: boolean;
   children: React.ReactNode;
+  seoTitle?: string;
 }
 
-export default function Layout({ title, canGoBack, hasTabBar, children, streamBack }: LayoutProps) {
+export default function Layout({ title, canGoBack, hasTabBar, children, streamBack, seoTitle }: LayoutProps) {
   const router = useRouter();
   const onClick = () => {
     router.back();
@@ -22,6 +24,9 @@ export default function Layout({ title, canGoBack, hasTabBar, children, streamBa
 
   return (
     <div className="py-8">
+      <Head>
+        <title>{seoTitle ? `${seoTitle} | Carrot Market` : "Carrot Market"}</title>
+      </Head>
       <div className="bg-white h-14 w-full max-w-xl justify-center text-lg font-medium py-3 fixed text-gray-800 border-b top-0 flex items-center px-10">
         {canGoBack ? (
           <button onClick={onClick} className="absolute left-4">
