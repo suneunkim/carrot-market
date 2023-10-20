@@ -18,7 +18,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse<ResponseType>) 
   if (req.method === "POST") {
     const {
       session: { user },
-      body: { email, phone, name },
+      body: { email, phone, name, avatarUrl },
     } = req;
 
     // 로그인 한 유저와 수정하기에서의 값이 동일하면 업데이트 안해야함.
@@ -93,6 +93,16 @@ async function handler(req: NextApiRequest, res: NextApiResponse<ResponseType>) 
         },
         data: {
           name,
+        },
+      });
+    }
+    if (avatarUrl) {
+      await client.user.update({
+        where: {
+          id: user?.id,
+        },
+        data: {
+          avatar: avatarUrl,
         },
       });
     }

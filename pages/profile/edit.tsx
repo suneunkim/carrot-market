@@ -7,7 +7,6 @@ import useSWR from "swr";
 
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { StringLiteral } from "typescript";
 
 interface EditProfileForm {
   name?: string;
@@ -44,14 +43,47 @@ export default function Edit() {
 
   const { mutate } = useSWR("/api/users/me");
 
-  const onValid = ({ email, phone, name, avatar }: EditProfileForm) => {
+  // cloudinary에 이미지 업로드하기
+  const imageUploader = async (file: any) => {
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("upload_preset", "fff1cvhg");
+
+    try {
+      const response = await fetch(`https://api.cloudinary.com/v1_1/dcmxpsjbw/image/upload`, {
+        method: "POST",
+        body: formData,
+      });
+
+      if (!response.ok) {
+        throw new Error(`Image upload failed with status: ${response.status}`);
+      }
+      const data = await response.json();
+      console.log(data);
+      return data.url;
+    } catch (error) {
+      console.error("Error uploading image", error);
+    }
+  };
+
+  const onValid = async ({ email, phone, name, avatar }: EditProfileForm) => {
     if (loading) return;
     if (!email && !phone && !name) {
       return setError("formErrors", { message: "이메일 또는 전화번호 중 하나가 필요합니다." });
     }
-    editProfile({ email, phone, name, avatar });
+    try {
+      if (avatar) {
+        const avatarUrl = await imageUploader(avatar[0]);
+        editProfile({ email, phone, name, avatarUrl });
+      } else {
+        editProfile({ email, phone, name });
+      }
+    } catch (error) {
+      console.error("onValid", error);
+    }
     mutate();
   };
+
   useEffect(() => {
     if (data && !data.ok && data.error) {
       setError("formErrors", { message: data.error });
@@ -72,7 +104,8 @@ export default function Edit() {
     <Layout title="프로필 수정하기" canGoBack>
       <form onSubmit={handleSubmit(onValid)} className=" px-4 space-y-4">
         <div className="flex items-center space-x-3">
-          <img src={avatarPreview} className="w-14 h-14 rounded-full bg-slate-200" />
+          {/* <img src={avatarPreview} className="w-14 h-14 rounded-full bg-slate-200" /> */}
+          <img src={avatarPreview ? avatarPreview : user?.avatar!} className="w-14 h-14 rounded-full bg-slate-200" />
           <span>{user?.name}</span>
           <label
             htmlFor="picture"

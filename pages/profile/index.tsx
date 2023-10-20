@@ -40,7 +40,7 @@ export function Profile() {
       <div className="px-4">
         <div className="flex justify-between">
           <div className="flex items-center space-x-5">
-            <div className="w-16 h-16 bg-slate-200 rounded-full" />
+            <img src={user?.avatar!} className="w-16 h-16 bg-slate-200 rounded-full" />
             <div className="flex flex-col">
               <span className="font-medium text-gray-700">{user?.name}</span>
               <Link href="/profile/edit" className="hover:font-semibold transition-all">
