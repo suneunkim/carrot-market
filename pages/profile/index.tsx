@@ -18,7 +18,7 @@ interface ReviewResponse {
   reviews: ReviewWithUser[];
 }
 
-export default function Profile() {
+export function Profile() {
   const { user } = useUser();
   const { data } = useSWR<ReviewResponse>("/api/reviews");
   const router = useRouter();
@@ -179,6 +179,6 @@ export const getServerSideProps = withSsrSession(async function ({ req }: NextPa
   };
 });
 
-// export default Page;
+export default Page;
 
 // withSsrSession로 getServerSideProps 감싸기

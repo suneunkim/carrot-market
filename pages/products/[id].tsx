@@ -35,7 +35,7 @@ export default function ItemDetail() {
     <Layout canGoBack hasTabBar title="상품을 둘러보세요!">
       <div className="px-4 py-10">
         <div className="mb-8">
-          <div className="h-96 bg-slate-200" />
+          {data?.product?.image ? <img src={data?.product.image} /> : <div className="h-96 bg-slate-200" />}
           <Link
             href={`/user/profiles/${data?.product?.user?.id}`}
             className="flex py-3 items-center space-x-3 border-b"

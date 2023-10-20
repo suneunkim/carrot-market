@@ -12,11 +12,15 @@ export const middleware = async (req: NextRequest, ev: NextFetchEvent) => {
   });
 
   if (!req.url.includes("/api")) {
-    return;
     if (!session.user && !req.url.includes("/login")) {
-      const url = req.nextUrl.clone();
-      url.pathname = "/login";
-      return NextResponse.rewrite(url);
+      return;
+
+      const loginUrl = new URL("login", req.url);
+      return NextResponse.redirect(loginUrl);
+
+      // const url = req.nextUrl.clone();
+      // url.pathname = "/login";
+      // return NextResponse.rewrite(url);
     }
   }
 };
