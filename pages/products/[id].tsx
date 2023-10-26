@@ -6,6 +6,7 @@ import { Item, User } from "@prisma/client";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import useSWR, { useSWRConfig } from "swr";
+import Image from "next/image";
 
 interface ProductWithUser extends Item {
   user: User;
@@ -23,7 +24,7 @@ export default function ItemDetail() {
   const { data, mutate: boundMutate } = useSWR<ItemDetailResponse>(
     router.query.id ? `/api/products/${router.query.id}` : null
   );
-
+  console.log(data);
   const { mutate } = useSWRConfig();
 
   const [toggleFav] = useMutation(`/api/products/${router.query.id}/fav`);
@@ -35,12 +36,20 @@ export default function ItemDetail() {
     <Layout canGoBack hasTabBar title="상품을 둘러보세요!">
       <div className="px-4 py-10">
         <div className="mb-8">
-          {data?.product?.image ? <img src={data?.product.image} /> : <div className="h-96 bg-slate-200" />}
+          {data?.product?.image ? (
+            <Image priority={false} width={500} height={500} alt="상품 이미지" src={data?.product.image} />
+          ) : (
+            <div className="h-96 bg-slate-200" />
+          )}
           <Link
             href={`/user/profiles/${data?.product?.user?.id}`}
             className="flex py-3 items-center space-x-3 border-b"
           >
-            <div className="w-12 h-12 bg-slate-200 rounded-full" />
+            {data?.product?.user?.avatar ? (
+              <img className="h-12 w-12 rounded-full" src={data?.product?.user?.avatar} />
+            ) : (
+              <div className="h-12 w-12 bg-slate-200 rounded-full" />
+            )}
             <div>
               <p className="font-medium text-gray-700">{data?.product?.user?.name}</p>
               <p className="text-sm font-medium text-gray-700">View profile &rarr;</p>

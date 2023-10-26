@@ -6,6 +6,8 @@ import { Item } from "@prisma/client";
 import HomeItem from "@/components/home-item";
 import client from "@/libs/server/client";
 import { NextPage } from "next";
+import CategoryNav from "@/components/Category";
+import Loader from "@/components/Loader";
 
 export interface ProductWithCount extends Item {
   _count: {
@@ -24,6 +26,7 @@ export function Home() {
 
   return (
     <Layout title="Home" hasTabBar>
+      <CategoryNav />
       <div className="grid sm:grid-cols-2 gap-2">
         {data?.products?.map((product) => (
           <HomeItem

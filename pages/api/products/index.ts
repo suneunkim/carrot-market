@@ -22,7 +22,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse<ResponseType>) 
   }
   if (req.method === "POST") {
     const {
-      body: { name, price, description, imageUrl },
+      body: { name, price, description, imageUrl, category },
       session: { user },
     } = req;
     // upload에서 생성함
@@ -33,6 +33,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse<ResponseType>) 
         price: +price,
         description,
         image: imageUrl ? imageUrl : "",
+        category,
         user: {
           connect: {
             id: user?.id,

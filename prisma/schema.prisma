@@ -1,5 +1,6 @@
 // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
+// npx prisma db push
 
 generator client {
   provider = "prisma-client-js"
@@ -44,6 +45,7 @@ model Item {
   name        String
   price       Int
   description String     @db.MediumText
+  category    String?
   favs        Fav[]
   sales       Sale[]
   purchases   Purchase[]

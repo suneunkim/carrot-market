@@ -1,10 +1,11 @@
+import Loader from "@/components/Loader";
 import FloatingButton from "@/components/floating-button";
 import Layout from "@/components/layout";
 import useCoords from "@/libs/client/useCoords";
 import { Post, User } from "@prisma/client";
 import { formatDistanceToNow } from "date-fns";
 import Link from "next/link";
-import { useState } from "react";
+import { Suspense, useState } from "react";
 import useSWR, { useSWRConfig } from "swr";
 
 interface PostWithUser extends Post {
@@ -35,6 +36,7 @@ export default function Community() {
       <button className=" bg-orange-400 ml-4 px-2 py-1 rounded-md text-sm text-white" onClick={nearButton}>
         {near ? "전체 게시물 둘러보기" : "가까운 게시물 둘러보기"}
       </button>
+      {data ? null : <Loader />}
       <div className="py-3 px-4 space-y-5">
         {near ? (
           <>
