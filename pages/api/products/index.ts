@@ -26,6 +26,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse<ResponseType>) 
       session: { user },
     } = req;
     // upload에서 생성함
+
     const product = await client.item.create({
       data: {
         name,

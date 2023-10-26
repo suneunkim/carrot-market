@@ -1,5 +1,7 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
-
+tjsdms89 / github
+pscale auth login
+pscale connect sun-nomadcoder
 # dependencies
 /node_modules
 /.pnp
