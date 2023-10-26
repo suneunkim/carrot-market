@@ -1,25 +1,48 @@
-import { cls } from "@/libs/utils";
+import { cls } from "@/libs/client/utils";
+import Head from "next/head";
 import Link from "next/link";
 import { useRouter } from "next/router";
 
 interface LayoutProps {
   title?: string;
   canGoBack?: boolean;
+  streamBack?: boolean;
   hasTabBar?: boolean;
   children: React.ReactNode;
+  seoTitle?: string;
 }
 
-export default function Layout({ title, canGoBack, hasTabBar, children }: LayoutProps) {
+export default function Layout({ title, canGoBack, hasTabBar, children, streamBack, seoTitle }: LayoutProps) {
   const router = useRouter();
   const onClick = () => {
     router.back();
   };
+  // 라이브 stream 업로드하고 뒤로가기 누르면 다시 업로드 화면으로 가는거 방지.
+  const onClickStreamBack = () => {
+    router.push("/streams");
+  };
 
   return (
     <div className="py-8">
+      <Head>
+        <title>{seoTitle ? `${seoTitle} | Carrot Market` : "Carrot Market"}</title>
+      </Head>
       <div className="bg-white h-14 w-full max-w-xl justify-center text-lg font-medium py-3 fixed text-gray-800 border-b top-0 flex items-center px-10">
         {canGoBack ? (
           <button onClick={onClick} className="absolute left-4">
+            <svg
+              className="w-6 h-6"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7"></path>
+            </svg>
+          </button>
+        ) : null}
+        {streamBack ? (
+          <button onClick={onClickStreamBack} className="absolute left-4">
             <svg
               className="w-6 h-6"
               fill="none"
@@ -111,7 +134,7 @@ export default function Layout({ title, canGoBack, hasTabBar, children }: Layout
               <span>채팅</span>
             </div>
           </Link>
-          <Link href="/live">
+          <Link href="/streams">
             <div
               className={cls(
                 "flex flex-col items-center space-y-2",

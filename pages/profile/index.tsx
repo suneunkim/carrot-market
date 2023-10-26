@@ -1,18 +1,56 @@
 import Layout from "@/components/layout";
+import useUser from "@/libs/client/useUser";
+import { cls } from "@/libs/client/utils";
+import { Review, User } from "@prisma/client";
 import Link from "next/link";
+import { useRouter } from "next/router";
+import useSWR, { SWRConfig } from "swr";
+import { NextPage, NextPageContext } from "next";
+import { withSsrSession } from "@/libs/server/withSession";
+import client from "@/libs/server/client";
 
-export default function Profile() {
+interface ReviewWithUser extends Review {
+  createBy: User;
+}
+
+interface ReviewResponse {
+  ok: boolean;
+  reviews: ReviewWithUser[];
+}
+
+export function Profile() {
+  const { user } = useUser();
+  const { data } = useSWR<ReviewResponse>("/api/reviews");
+  const router = useRouter();
+
+  const onLogout = async () => {
+    const request = await fetch("/api/users/logout", {
+      method: "POST",
+    });
+
+    if (request.status === 200) {
+      router.push("/login");
+    } else {
+      console.log("로그아웃 실패");
+    }
+  };
+
   return (
     <Layout title="나의 정보" hasTabBar>
       <div className="px-4">
-        <div className="flex items-center space-x-5">
-          <div className="w-16 h-16 bg-slate-200 rounded-full" />
-          <div className="flex flex-col">
-            <span className="font-medium text-gray-700">Steve Jebs</span>
-            <Link href="/profile/edit" className="hover:font-semibold transition-all">
-              <span className="text-sm text-gray-700">프로필 수정하기 &rarr;</span>
-            </Link>
+        <div className="flex justify-between">
+          <div className="flex items-center space-x-5">
+            <img src={user?.avatar!} className="w-16 h-16 bg-slate-200 rounded-full" />
+            <div className="flex flex-col">
+              <span className="font-medium text-gray-700">{user?.name}</span>
+              <Link href="/profile/edit" className="hover:font-semibold transition-all">
+                <span className="text-sm text-gray-700">프로필 수정하기 &rarr;</span>
+              </Link>
+            </div>
           </div>
+          <button onClick={onLogout} className="text-sm hover:text-gray-600">
+            로그아웃
+          </button>
         </div>
         <div className="mt-10 flex justify-around">
           <Link href="/profile/sold" className="flex flex-col items-center">
@@ -82,70 +120,65 @@ export default function Profile() {
             <span className="text-sm font-medium text-g-700 mt-2">관심목록</span>
           </Link>
         </div>
-        <div className="mt-12">
-          <div className="flex items-center space-x-4">
-            <div className="w-12 h-12 rounded-full bg-slate-200" />
-            <div>
-              <h4 className="text-sm font-bold text-gray-700">니꼬</h4>
-              <div className="flex items-center">
-                <svg
-                  className="text-yellow-400 h-5 w-5"
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 20 20"
-                  fill="currentColor"
-                  aria-hidden="true"
-                >
-                  <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                </svg>
-                <svg
-                  className="text-yellow-400 h-5 w-5"
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 20 20"
-                  fill="currentColor"
-                  aria-hidden="true"
-                >
-                  <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                </svg>
-                <svg
-                  className="text-yellow-400 h-5 w-5"
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 20 20"
-                  fill="currentColor"
-                  aria-hidden="true"
-                >
-                  <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                </svg>
-                <svg
-                  className="text-yellow-400 h-5 w-5"
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 20 20"
-                  fill="currentColor"
-                  aria-hidden="true"
-                >
-                  <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                </svg>
-                <svg
-                  className="text-gray-400 h-5 w-5"
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 20 20"
-                  fill="currentColor"
-                  aria-hidden="true"
-                >
-                  <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                </svg>
+        <span>{data?.reviews.length === 0 ? "아직 리뷰가 없습니다" : ""}</span>
+        {data?.reviews.map((review) => (
+          <div key={review?.id} className="mt-12">
+            <div className="flex items-center space-x-4">
+              <div className="w-12 h-12 rounded-full bg-slate-200" />
+              <div>
+                <h4 className="text-sm font-bold text-gray-700">{review.createBy.name}</h4>
+                {/* 별점 */}
+                <div className="flex items-center">
+                  {[1, 2, 3, 4, 5].map((star) => (
+                    <svg
+                      key={star}
+                      className={cls("h-5 w-5", review.score >= star ? "text-yellow-400" : "text-gray-400")}
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 20 20"
+                      fill="currentColor"
+                      aria-hidden="true"
+                    >
+                      <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                    </svg>
+                  ))}
+                </div>
               </div>
             </div>
+            <div className="mt-4 text-gray-600 text-sm">
+              <p>{review?.review}</p>
+            </div>
           </div>
-          <div className="mt-4 text-gray-600 text-sm">
-            <p>
-              Normally, both your asses would be dead as fucking fried chicken, but you happen to pull this shit while
-              I&apos;m in a transitional period so I don&apos;t wanna kill you, I wanna help you. But I can&apos;t give
-              you this case, it don&apos;t belong to me. Besides, I&apos;ve already been through too much shit this
-              morning over this case to hand it over to your dumb ass.
-            </p>
-          </div>
-        </div>
+        ))}
       </div>
     </Layout>
   );
 }
+
+const Page: NextPage<{ profile: User }> = ({ profile }) => {
+  return (
+    <SWRConfig
+      value={{
+        fallback: {
+          "/api/users/me": { ok: true, profile },
+        },
+      }}
+    >
+      <Profile />
+    </SWRConfig>
+  );
+};
+
+export const getServerSideProps = withSsrSession(async function ({ req }: NextPageContext) {
+  const profile = await client.user.findUnique({
+    where: { id: req?.session.user?.id },
+  });
+  return {
+    props: {
+      profile: JSON.parse(JSON.stringify(profile)),
+    },
+  };
+});
+
+export default Page;
+
+// withSsrSession로 getServerSideProps 감싸기

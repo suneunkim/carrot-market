@@ -1,20 +1,29 @@
 import FloatingButton from "@/components/floating-button";
 import Layout from "@/components/layout";
+import { Stream } from "@prisma/client";
 import Link from "next/link";
+import useSWR from "swr";
 
-export default function Live() {
+interface StreamResponse {
+  ok: boolean;
+  streams: Stream[];
+}
+
+export default function Stream() {
+  const { data } = useSWR<StreamResponse>("/api/streams");
+
   return (
     <Layout title="라이브" hasTabBar>
       <div className="space-y-3 pb-3">
-        {[...Array(3)].map((_, i) => (
-          <div className="py-2 px-4 border-b">
-            <Link href={`/live/${i}`} key={i}>
+        {data?.streams?.map((live) => (
+          <div key={live.id} className="py-2 px-4 border-b">
+            <Link href={`/streams/${live.id}`}>
               <div className="w-full bg-slate-300 aspect-video rounded-md" />
-              <h3 className="font-medium text-gray-700 text-lg mt-2">제목의 자리라고 볼수있다.</h3>
+              <h3 className="font-medium text-gray-700 text-lg mt-2">{live.name}</h3>
             </Link>
           </div>
         ))}
-        <FloatingButton href="/live/upload">
+        <FloatingButton href="/streams/upload">
           <svg
             className="h-6 w-6"
             xmlns="http://www.w3.org/2000/svg"
