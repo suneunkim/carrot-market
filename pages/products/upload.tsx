@@ -26,8 +26,6 @@ export default function ItemUpload() {
   const [uploadItem, { loading, data }] = useMutation<UploadProductMutation>("/api/products");
 
   const imageUploader = async (file: any) => {
-    const cloudName = process.env.CLOUD_NAME;
-
     const formData = new FormData();
     formData.append("file", file);
     formData.append("upload_preset", "fff1cvhg");

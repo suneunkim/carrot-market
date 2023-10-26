@@ -59,7 +59,6 @@ export default function Edit() {
         throw new Error(`Image upload failed with status: ${response.status}`);
       }
       const data = await response.json();
-      console.log(data);
       return data.url;
     } catch (error) {
       console.error("Error uploading image", error);
@@ -104,7 +103,6 @@ export default function Edit() {
     <Layout title="프로필 수정하기" canGoBack>
       <form onSubmit={handleSubmit(onValid)} className=" px-4 space-y-4">
         <div className="flex items-center space-x-3">
-          {/* <img src={avatarPreview} className="w-14 h-14 rounded-full bg-slate-200" /> */}
           <img src={avatarPreview ? avatarPreview : user?.avatar!} className="w-14 h-14 rounded-full bg-slate-200" />
           <span>{user?.name}</span>
           <label
@@ -123,7 +121,7 @@ export default function Edit() {
         {errors.formErrors ? (
           <div className="my-2 text-center text-red-500 font-semibold">{errors?.formErrors.message}</div>
         ) : null}
-        <Button text={loading ? "Loading..." : "수정하기"} />
+        <Button text={loading ? "변경 사항 저장 중..." : "수정하기"} />
       </form>
     </Layout>
   );

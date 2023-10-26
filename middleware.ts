@@ -2,6 +2,7 @@ import { getIronSession } from "iron-session/edge"; // 세션을 관리하고 �
 import { NextFetchEvent, NextRequest, NextResponse } from "next/server";
 
 export const middleware = async (req: NextRequest, ev: NextFetchEvent) => {
+  //console.log("@req@", req.nextUrl);
   const res = NextResponse.next();
   const session = await getIronSession(req, res, {
     cookieName: "carrotsession",
@@ -12,15 +13,15 @@ export const middleware = async (req: NextRequest, ev: NextFetchEvent) => {
   });
 
   if (!req.url.includes("/api")) {
-    if (!session.user && !req.url.includes("/login")) {
-      return;
-
-      const loginUrl = new URL("login", req.url);
-      return NextResponse.redirect(loginUrl);
-
-      // const url = req.nextUrl.clone();
-      // url.pathname = "/login";
-      // return NextResponse.rewrite(url);
+    const pathname = req.nextUrl.pathname;
+    pathname.startsWith;
+    console.log(pathname);
+    if (session.user && pathname.startsWith("/login")) {
+      //return NextResponse.redirect(new URL("/", req.url));
     }
+    if ((!session.user && !pathname.includes("/login")) || !pathname.includes("/create-account")) {
+      //return NextResponse.redirect(new URL("login", req.url));
+    }
+    // return NextResponse.next();
   }
 };
