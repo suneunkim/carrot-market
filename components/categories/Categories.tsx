@@ -45,8 +45,4 @@ export const categoryList = [
   },
 ];
 
-const Categories = () => {
-  return <div>Categories</div>;
-};
-
-export default Categories;
+export default categoryList;

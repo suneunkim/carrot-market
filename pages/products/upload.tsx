@@ -8,7 +8,7 @@ import { useEffect, useState } from "react";
 import { Item } from "@prisma/client";
 import { useRouter } from "next/router";
 import CategoryInput from "@/components/categories/CategoryInput";
-import { categoryList } from "@/components/categories/Categories";
+import categoryList from "@/components/categories/Categories";
 
 interface UploadProductForm {
   name: string;

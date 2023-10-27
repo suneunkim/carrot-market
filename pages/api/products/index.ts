@@ -15,11 +15,26 @@ async function handler(req: NextApiRequest, res: NextApiResponse<ResponseType>) 
         },
       },
     });
+    // item.findMany 로 category 일치하는 item 찾기
+    const {
+      query: { categoryQuery },
+    } = req;
+
+    const seletedCategory = await client.item.findMany({
+      where: {
+        category: {
+          equals: categoryQuery as string,
+        },
+      },
+    });
+
     res.json({
       ok: true,
       products,
+      seletedCategory,
     });
   }
+
   if (req.method === "POST") {
     const {
       body: { name, price, description, imageUrl, category },

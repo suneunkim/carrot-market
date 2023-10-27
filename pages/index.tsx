@@ -6,8 +6,9 @@ import { Item } from "@prisma/client";
 import HomeItem from "@/components/home-item";
 import client from "@/libs/server/client";
 import { NextPage } from "next";
-import CategoryNav from "@/components/Category";
+import CategoryNav from "@/components/categories/CategoryNav";
 import Loader from "@/components/Loader";
+import React from "react";
 
 export interface ProductWithCount extends Item {
   _count: {
@@ -22,11 +23,14 @@ interface ProductsResponse {
 
 export function Home() {
   const { user, isLoading } = useUser();
-  const { data } = useSWR<ProductsResponse>("/api/products");
+  const [seleted, setSelected] = React.useState<string>("");
+  const { data } = useSWR<ProductsResponse>(`/api/products?categoryQuery=${seleted}`);
+
+  console.log(data);
 
   return (
     <Layout title="Home" hasTabBar>
-      <CategoryNav />
+      <CategoryNav setSelected={setSelected} />
       <div className="grid sm:grid-cols-2 gap-2">
         {data?.products?.map((product) => (
           <HomeItem
