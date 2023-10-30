@@ -22,15 +22,21 @@ interface ProductsResponse {
 }
 
 export function Home() {
-  const { user, isLoading } = useUser();
+  const { user, isLoading: userIsLoading } = useUser();
   const [seleted, setSelected] = React.useState<string>("");
-  const { data } = useSWR<ProductsResponse>(`/api/products?categoryQuery=${seleted}`);
+  const { data, isLoading } = useSWR<ProductsResponse>(`/api/products?categoryQuery=${seleted}`);
 
+  const [viewCategory, setViewCategory] = React.useState<boolean>(false);
+  const toggleViewCategory = () => setViewCategory(true);
+  console.log(viewCategory);
   return (
     <Layout title="Home" hasTabBar>
-      <CategoryNav setSelected={setSelected} />
+      <CategoryNav onClick={toggleViewCategory} setSelected={setSelected} />
       <>
-        {data?.seletedCategoryProducts?.length! > 0 ? (
+        {viewCategory && data?.seletedCategoryProducts?.length! <= 0 && !isLoading && (
+          <div className="pb-4 my-4 flex justify-center text-gray-600">해당 카테고리의 상품이 없습니다.</div>
+        )}
+        {data?.seletedCategoryProducts?.length! > 0 && !isLoading && (
           <div className="grid sm:grid-cols-2 gap-2">
             {data?.seletedCategoryProducts?.map((product) => (
               <HomeItem
@@ -43,9 +49,8 @@ export function Home() {
               />
             ))}
           </div>
-        ) : (
-          <div className="pb-4 my-4 flex justify-center text-gray-600">해당 카테고리의 상품이 없습니다.</div>
         )}
+
         <div className="grid sm:grid-cols-2 gap-2 border-t pt-8">
           {data?.filteredProducts?.map((product) => (
             <HomeItem

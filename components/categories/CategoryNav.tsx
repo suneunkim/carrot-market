@@ -2,12 +2,18 @@ import React, { useEffect } from "react";
 import categoryList from "@/components/categories/Categories";
 import CategoryBox from "./CategoryBox";
 
-const CategoryNav = ({ setSelected }: { setSelected: (path: string) => void }) => {
+type CategoryNavProps = {
+  onClick: () => void;
+  setSelected: (path: string) => void;
+};
+
+const CategoryNav = ({ onClick, setSelected }: CategoryNavProps) => {
   const [path, setPath] = React.useState<string>("");
 
   const handleCategoryClick = (categoryPath: string) => {
     setPath(categoryPath);
     setSelected(categoryPath);
+    onClick();
   };
 
   return (
