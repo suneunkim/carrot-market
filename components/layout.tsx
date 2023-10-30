@@ -14,12 +14,16 @@ interface LayoutProps {
 
 export default function Layout({ title, canGoBack, hasTabBar, children, streamBack, seoTitle }: LayoutProps) {
   const router = useRouter();
+
   const onClick = () => {
-    router.back();
-  };
-  // 라이브 stream 업로드하고 뒤로가기 누르면 다시 업로드 화면으로 가는거 방지.
-  const onClickStreamBack = () => {
-    router.push("/streams");
+    const cureentPath = router.pathname;
+    if (cureentPath.includes("streams")) {
+      router.push("/streams");
+    }
+    if (cureentPath.includes("community")) {
+      router.push("/community");
+    } else router.back();
+    // 업로드하고 뒤로가기 시 다시 업로드 화면으로 가는거 방지.
   };
 
   return (
