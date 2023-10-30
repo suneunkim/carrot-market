@@ -27,7 +27,7 @@ export default function Layout({ title, canGoBack, hasTabBar, children, streamBa
       <Head>
         <title>{seoTitle ? `${seoTitle} | Carrot Market` : "Carrot Market"}</title>
       </Head>
-      <div className="bg-white h-14 w-full max-w-xl justify-center text-lg font-medium py-3 fixed text-gray-800 border-b top-0 flex items-center px-10">
+      <div className="bg-white h-14 w-full max-w-xl justify-center text-lg font-medium py-3 fixed text-gray-800 border-b top-0 flex items-center px-10 z-10">
         {canGoBack ? (
           <button onClick={onClick} className="absolute left-4">
             <svg

@@ -37,9 +37,7 @@ export default function ItemDetail() {
     <Layout canGoBack hasTabBar title="상품을 둘러보세요!">
       <div className="px-4 py-10">
         {!data ? (
-          <div className="h-screen">
-            <Loader />
-          </div>
+          <Loader />
         ) : (
           <>
             <div className="mb-8">

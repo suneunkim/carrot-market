@@ -7,7 +7,6 @@ import HomeItem from "@/components/home-item";
 import client from "@/libs/server/client";
 import { NextPage } from "next";
 import CategoryNav from "@/components/categories/CategoryNav";
-import Loader from "@/components/Loader";
 import React from "react";
 
 export interface ProductWithCount extends Item {
@@ -27,8 +26,6 @@ export function Home() {
   const [seleted, setSelected] = React.useState<string>("");
   const { data } = useSWR<ProductsResponse>(`/api/products?categoryQuery=${seleted}`);
 
-  console.log(data);
-
   return (
     <Layout title="Home" hasTabBar>
       <CategoryNav setSelected={setSelected} />
@@ -42,6 +39,7 @@ export function Home() {
                 title={product.name}
                 price={product.price.toLocaleString("ko-KR")}
                 hearts={product._count?.favs}
+                imageUri={product.image}
               />
             ))}
           </div>
@@ -56,6 +54,7 @@ export function Home() {
               title={product.name}
               price={product.price.toLocaleString("ko-KR")}
               hearts={product._count?.favs}
+              imageUri={product.image}
             />
           ))}
         </div>
