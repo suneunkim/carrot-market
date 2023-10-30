@@ -33,7 +33,7 @@ export default function ItemUpload() {
 
   const category = watch("category");
 
-  const [uploadItem, { loading, data }] = useMutation<UploadProductMutation>("/api/products");
+  const [uploadItem, { loading, data }] = useMutation<UploadProductMutation>("/api/products/upload");
 
   const imageUploader = async (file: any) => {
     const formData = new FormData();

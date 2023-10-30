@@ -18,7 +18,8 @@ export interface ProductWithCount extends Item {
 
 interface ProductsResponse {
   ok: boolean;
-  products: ProductWithCount[];
+  filteredProducts: ProductWithCount[];
+  seletedCategoryProducts: ProductWithCount[];
 }
 
 export function Home() {
@@ -31,31 +32,49 @@ export function Home() {
   return (
     <Layout title="Home" hasTabBar>
       <CategoryNav setSelected={setSelected} />
-      <div className="grid sm:grid-cols-2 gap-2">
-        {data?.products?.map((product) => (
-          <HomeItem
-            id={product.id}
-            key={product.id}
-            title={product.name}
-            price={product.price.toLocaleString("ko-KR")}
-            hearts={product._count?.favs}
-          />
-        ))}
-        {user && (
-          <FloatingButton href="/products/upload">
-            <svg
-              className="h-6 w-6"
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              aria-hidden="true"
-            >
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-            </svg>
-          </FloatingButton>
+      <>
+        {data?.seletedCategoryProducts?.length! > 0 ? (
+          <div className="grid sm:grid-cols-2 gap-2">
+            {data?.seletedCategoryProducts?.map((product) => (
+              <HomeItem
+                id={product.id}
+                key={product.id}
+                title={product.name}
+                price={product.price.toLocaleString("ko-KR")}
+                hearts={product._count?.favs}
+              />
+            ))}
+          </div>
+        ) : (
+          <div className="pb-4 my-4 flex justify-center text-gray-600">해당 카테고리의 상품이 없습니다.</div>
         )}
-      </div>
+        <div className="grid sm:grid-cols-2 gap-2 border-t pt-8">
+          {data?.filteredProducts?.map((product) => (
+            <HomeItem
+              id={product.id}
+              key={product.id}
+              title={product.name}
+              price={product.price.toLocaleString("ko-KR")}
+              hearts={product._count?.favs}
+            />
+          ))}
+        </div>
+      </>
+      {/* 플로팅 버튼 */}
+      {user && (
+        <FloatingButton href="/products/upload">
+          <svg
+            className="h-6 w-6"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            aria-hidden="true"
+          >
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+          </svg>
+        </FloatingButton>
+      )}
     </Layout>
   );
 }
