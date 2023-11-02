@@ -25,7 +25,6 @@ export default function ItemDetail() {
   const { data, mutate: boundMutate } = useSWR<ItemDetailResponse>(
     router.query.id ? `/api/products/${router.query.id}` : null
   );
-  console.log(data);
   const { mutate } = useSWRConfig();
 
   const [toggleFav] = useMutation(`/api/products/${router.query.id}/fav`);

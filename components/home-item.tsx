@@ -15,11 +15,11 @@ export default function HomeItem({ title, id, price, hearts, imageUri }: ItemPro
   return (
     <Link className="mb-5" href={`/products/${id}`}>
       <section className="px-3 pb-3 space-y-2 cursor-pointer">
-        <div className="w-full h-52 relative">
+        <div className="w-full aspect-square rounded-lg overflow-hidden relative">
           {imageUri ? (
             <Image priority={false} layout="fill" alt="상품 이미지" src={imageUri} />
           ) : (
-            <div className="w-full h-52 bg-gray-300 rounded-md" />
+            <div className="w-full aspect-square rounded-lg bg-gray-300 " />
           )}
         </div>
 

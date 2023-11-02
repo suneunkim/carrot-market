@@ -15,7 +15,7 @@ export const middleware = async (req: NextRequest, ev: NextFetchEvent) => {
   if (!req.url.includes("/api")) {
     const pathname = req.nextUrl.pathname;
     pathname.startsWith;
-    console.log(pathname);
+    //console.log(pathname);
     if (session.user && pathname.startsWith("/login")) {
       //return NextResponse.redirect(new URL("/", req.url));
     }

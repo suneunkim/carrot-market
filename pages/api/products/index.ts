@@ -13,12 +13,20 @@ async function handler(req: NextApiRequest, res: NextApiResponse<ResponseType>) 
         },
       },
     },
+    orderBy: {
+      createAt: "desc",
+    },
   });
 
   // item.findMany 로 category 일치하는 item 찾기
   const {
     query: { categoryQuery },
   } = req;
+
+  let query: any = {};
+  if (categoryQuery) {
+    query.category = categoryQuery;
+  }
 
   const seletedCategoryProducts = await client.item.findMany({
     include: {
@@ -28,10 +36,9 @@ async function handler(req: NextApiRequest, res: NextApiResponse<ResponseType>) 
         },
       },
     },
-    where: {
-      category: {
-        equals: categoryQuery as string,
-      },
+    where: query,
+    orderBy: {
+      createAt: "desc",
     },
   });
 
@@ -45,6 +52,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse<ResponseType>) 
     ok: true,
     filteredProducts,
     seletedCategoryProducts,
+    Allproducts,
   });
 }
 
