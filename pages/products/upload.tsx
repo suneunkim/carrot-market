@@ -9,6 +9,7 @@ import { Item } from "@prisma/client";
 import { useRouter } from "next/router";
 import CategoryInput from "@/components/categories/CategoryInput";
 import categoryList from "@/components/categories/Categories";
+import imageUploader from "../helpers/imageUploader";
 
 interface UploadProductForm {
   name: string;
@@ -34,27 +35,6 @@ export default function ItemUpload() {
   const category = watch("category");
 
   const [uploadItem, { loading, data }] = useMutation<UploadProductMutation>("/api/products/upload");
-
-  const imageUploader = async (file: any) => {
-    const formData = new FormData();
-    formData.append("file", file);
-    formData.append("upload_preset", "fff1cvhg");
-
-    try {
-      const response = await fetch(`https://api.cloudinary.com/v1_1/dcmxpsjbw/image/upload`, {
-        method: "POST",
-        body: formData,
-      });
-
-      if (!response.ok) {
-        throw new Error(`Image upload failed with status: ${response.status}`);
-      }
-      const data = await response.json();
-      return data.url;
-    } catch (error) {
-      console.error("Error uploading image", error);
-    }
-  };
 
   const onValid = async (formData: UploadProductForm) => {
     const { image, name, price, description, category } = formData;
