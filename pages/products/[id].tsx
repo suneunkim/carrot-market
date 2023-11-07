@@ -21,6 +21,9 @@ interface ItemDetailResponse {
 }
 
 export default function ItemDetail() {
+  const { user } = useUser();
+  console.log(user);
+
   const router = useRouter();
   const { data, mutate: boundMutate } = useSWR<ItemDetailResponse>(
     router.query.id ? `/api/products/${router.query.id}` : null
@@ -32,6 +35,15 @@ export default function ItemDetail() {
     boundMutate({ ...data, isLiked: !data?.isLiked }, false);
     toggleFav({});
   };
+
+  const handleButtonClick = () => {
+    if (data?.product?.user?.id === user?.id) {
+      return;
+    } else {
+      // 개별 채팅방으로 이동
+    }
+  };
+
   return (
     <Layout canGoBack hasTabBar title="상품을 둘러보세요!">
       <div className="px-4 py-10">
@@ -68,7 +80,7 @@ export default function ItemDetail() {
                     className="flex-1 bg-orange-500 text-white py-3 rounded-md shadow-md font-medium
              focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500 hover:bg-orange-400"
                   >
-                    대화하기
+                    {data?.product?.user?.id === user?.id ? "내 상품" : "대화하기"}
                   </button>
                   <button
                     onClick={onFavClick}

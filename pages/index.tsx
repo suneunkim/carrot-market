@@ -54,33 +54,16 @@ export function Home({ Allproducts }: ProductsResponse) {
         )}
         {/* 카테고리 제외 보여주기 */}
         <div className="grid sm:grid-cols-2 gap-2 border-t pt-8">
-          {!viewCategory ? (
-            <>
-              {Allproducts.map((product: ProductWithCount) => (
-                <HomeItem
-                  id={product.id}
-                  key={product.id}
-                  title={product.name}
-                  price={product.price.toLocaleString("ko-KR")}
-                  hearts={product._count?.favs}
-                  imageUri={product.image}
-                />
-              ))}
-            </>
-          ) : (
-            <>
-              {data?.filteredProducts?.map((product) => (
-                <HomeItem
-                  id={product.id}
-                  key={product.id}
-                  title={product.name}
-                  price={product.price.toLocaleString("ko-KR")}
-                  hearts={product._count?.favs}
-                  imageUri={product.image}
-                />
-              ))}
-            </>
-          )}
+          {data?.filteredProducts?.map((product) => (
+            <HomeItem
+              id={product.id}
+              key={product.id}
+              title={product.name}
+              price={product.price.toLocaleString("ko-KR")}
+              hearts={product._count?.favs}
+              imageUri={product.image}
+            />
+          ))}
         </div>
       </>
       {/* 플로팅 버튼 */}
