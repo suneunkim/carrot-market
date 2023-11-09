@@ -52,7 +52,6 @@ async function handler(req: NextApiRequest, res: NextApiResponse<ResponseType>) 
     ok: true,
     filteredProducts,
     seletedCategoryProducts,
-    Allproducts,
   });
 }
 

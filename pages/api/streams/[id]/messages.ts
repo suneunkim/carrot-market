@@ -10,26 +10,26 @@ async function handler(req: NextApiRequest, res: NextApiResponse<ResponseType>) 
     session: { user },
   } = req;
 
-  const message = await client.message.create({
-    data: {
-      message: body.message,
-      stream: {
-        connect: {
-          id: Number(id),
-        },
-      },
-      user: {
-        connect: {
-          id: user?.id,
-        },
-      },
-    },
-  });
+  // const message = await client.message.create({
+  //   data: {
+  //     message: body.message,
+  //     stream: {
+  //       connect: {
+  //         id: Number(id),
+  //       },
+  //     },
+  //     user: {
+  //       connect: {
+  //         id: user?.id,
+  //       },
+  //     },
+  //   },
+  // });
 
-  res.json({
-    ok: true,
-    message,
-  });
+  // res.json({
+  //   ok: true,
+  //   message,
+  // });
 }
 export default withApiSession(
   withHandler({

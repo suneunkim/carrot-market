@@ -5,9 +5,10 @@ import { cls } from "@/libs/client/utils";
 import { Item, User } from "@prisma/client";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import useSWR, { useSWRConfig } from "swr";
+import useSWR from "swr";
 import Image from "next/image";
 import Loader from "@/components/Loader";
+import { useEffect } from "react";
 
 interface ProductWithUser extends Item {
   user: User;
@@ -22,13 +23,12 @@ interface ItemDetailResponse {
 
 export default function ItemDetail() {
   const { user } = useUser();
-  console.log(user);
 
   const router = useRouter();
   const { data, mutate: boundMutate } = useSWR<ItemDetailResponse>(
     router.query.id ? `/api/products/${router.query.id}` : null
   );
-  const { mutate } = useSWRConfig();
+  const seller = data?.product.userId;
 
   const [toggleFav] = useMutation(`/api/products/${router.query.id}/fav`);
   const onFavClick = () => {
@@ -36,11 +36,30 @@ export default function ItemDetail() {
     toggleFav({});
   };
 
-  const handleButtonClick = () => {
+  const handleClickChat = async () => {
     if (data?.product?.user?.id === user?.id) {
-      return;
+      alert("내 상품입니다.");
     } else {
-      // 개별 채팅방으로 이동
+      // 대화 생성
+      const senderId = user?.id;
+      const receiverId = seller;
+
+      try {
+        const response = await fetch("/api/chats", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ senderId, receiverId }),
+        });
+
+        if (response.ok === true) {
+          const { conversationId } = await response.json();
+          router.push(`/chats/${conversationId}`);
+        }
+      } catch (error) {
+        console.log("error", error);
+      }
     }
   };
 
@@ -77,6 +96,7 @@ export default function ItemDetail() {
                 <p className="text-base my-6 text-gray-700">{data?.product?.description}</p>
                 <div className="flex items-center justify-between space-x-2">
                   <button
+                    onClick={handleClickChat}
                     className="flex-1 bg-orange-500 text-white py-3 rounded-md shadow-md font-medium
              focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-orange-500 hover:bg-orange-400"
                   >

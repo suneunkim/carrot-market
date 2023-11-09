@@ -9,7 +9,6 @@ import { cls } from "@/libs/client/utils";
 import { useForm } from "react-hook-form";
 import TextArea from "@/components/textarea";
 import Button from "@/components/button";
-import { da, ko } from "date-fns/locale";
 import { useEffect } from "react";
 import Loader from "@/components/Loader";
 

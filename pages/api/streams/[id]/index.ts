@@ -12,20 +12,20 @@ async function handler(req: NextApiRequest, res: NextApiResponse<ResponseType>) 
     where: {
       id: Number(id),
     },
-    include: {
-      messages: {
-        select: {
-          id: true,
-          message: true,
-          user: {
-            select: {
-              avatar: true,
-              id: true,
-            },
-          },
-        },
-      },
-    },
+    // include: {
+    //   messages: {
+    //     select: {
+    //       id: true,
+    //       message: true,
+    //       user: {
+    //         select: {
+    //           avatar: true,
+    //           id: true,
+    //         },
+    //       },
+    //     },
+    //   },
+    // },
   });
 
   res.json({

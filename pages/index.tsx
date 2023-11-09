@@ -24,7 +24,7 @@ interface ProductsResponse {
 
 export function Home({ Allproducts }: ProductsResponse) {
   const { user, isLoading: userIsLoading } = useUser();
-  const [seleted, setSelected] = React.useState<string>("");
+  const [seleted, setSelected] = React.useState<string>("nothing");
   const { data, isLoading } = useSWR<ProductsResponse>(`/api/products?categoryQuery=${seleted}`);
 
   const [viewCategory, setViewCategory] = React.useState<boolean>(false);
@@ -53,18 +53,33 @@ export function Home({ Allproducts }: ProductsResponse) {
           </div>
         )}
         {/* 카테고리 제외 보여주기 */}
-        <div className="grid sm:grid-cols-2 gap-2 border-t pt-8">
-          {data?.filteredProducts?.map((product) => (
-            <HomeItem
-              id={product.id}
-              key={product.id}
-              title={product.name}
-              price={product.price.toLocaleString("ko-KR")}
-              hearts={product._count?.favs}
-              imageUri={product.image}
-            />
-          ))}
-        </div>
+        {seleted === "nothing" ? (
+          <div className="grid sm:grid-cols-2 gap-2 border-t pt-8">
+            {Allproducts?.map((product) => (
+              <HomeItem
+                id={product.id}
+                key={product.id}
+                title={product.name}
+                price={product.price.toLocaleString("ko-KR")}
+                hearts={product._count?.favs}
+                imageUri={product.image}
+              />
+            ))}
+          </div>
+        ) : (
+          <div className="grid sm:grid-cols-2 gap-2 border-t pt-8">
+            {data?.filteredProducts?.map((product) => (
+              <HomeItem
+                id={product.id}
+                key={product.id}
+                title={product.name}
+                price={product.price.toLocaleString("ko-KR")}
+                hearts={product._count?.favs}
+                imageUri={product.image}
+              />
+            ))}
+          </div>
+        )}
       </>
       {/* 플로팅 버튼 */}
       {user && (

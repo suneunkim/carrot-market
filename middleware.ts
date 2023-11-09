@@ -12,16 +12,14 @@ export const middleware = async (req: NextRequest, ev: NextFetchEvent) => {
     },
   });
 
-  if (!req.url.includes("/api")) {
-    const pathname = req.nextUrl.pathname;
-    pathname.startsWith;
-    //console.log(pathname);
-    if (session.user && pathname.startsWith("/login")) {
-      //return NextResponse.redirect(new URL("/", req.url));
-    }
-    if ((!session.user && !pathname.includes("/login")) || !pathname.includes("/create-account")) {
-      //return NextResponse.redirect(new URL("login", req.url));
-    }
-    // return NextResponse.next();
+  const pathname = req.nextUrl.pathname;
+  pathname.startsWith;
+  //console.log(pathname);
+  if (session.user && pathname.startsWith("/login")) {
+    //return NextResponse.redirect(new URL("/", req.url));
   }
+  if ((!session.user && !pathname.includes("/login")) || !pathname.includes("/create-account")) {
+    //return NextResponse.redirect(new URL("login", req.url));
+  }
+  // return NextResponse.next();
 };
