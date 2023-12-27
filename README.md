@@ -20,6 +20,7 @@ Next.js, tailwindcss, Prisma, TypeScript, Cloudinary, swr
 
 #### 1. 홈
 - 등록된 상품 조회, 상품 등록하기
+- 카테고리 선택 시 선택한 카테고리의 상품이 최상단 표시.
     
 #### 2. 상품 업로드 페이지
 - 판매할 상품의 사진과 정보를 입력하고 등록시키기
