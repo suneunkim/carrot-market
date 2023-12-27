@@ -4,10 +4,13 @@
 - 주된 목표는 클라이언트와 서버 코드를 함께 작성하는 기술 습득.
 - 데이터베이스를 활용하여 사용자와의 상호작용 및 CRUD 작업을 연습.
 
+
+
 ## 사용 기술 스택:
 ```
 Next.js, tailwindcss, Prisma, TypeScript, Cloudinary, swr
 ```
+
 
 ## 요약
 
@@ -15,6 +18,8 @@ Next.js, tailwindcss, Prisma, TypeScript, Cloudinary, swr
 - 회원가입과 로그인, 상품 등록, 좋아요 기능과 게시판 기능을 가진 “동네생활”에 글을 등록하고 댓글을 등록하는 기능들에 DB를 연동했습니다.
 - data fetch로 swr를 사용하고, api 요청 시 쿼리 파라미터를 이용해 엔드포인트에서 카테고리를 구분해서 반환값을 구분했습니다.
 - 상품 등록 시 이미지 업로드는 Cloudinary CDN을 이용해 이미지를 안전하게 업로드하였습니다.
+
+
 
 ## 페이지 별 기능
 
@@ -24,6 +29,7 @@ Next.js, tailwindcss, Prisma, TypeScript, Cloudinary, swr
     
 #### 2. 상품 업로드 페이지
 - 판매할 상품의 사진과 정보를 입력하고 등록시키기
+- 카테고리 기능 추가
 
 #### 3. 동네 생활 페이지
 - 소통할 수 있는 게시판으로 등록된 게시물을 조회 (가까운 게시물 확인 가능)
@@ -33,6 +39,8 @@ Next.js, tailwindcss, Prisma, TypeScript, Cloudinary, swr
 #### 4. 사용자 페이지
 - 회원가입과 로그인: 간단하게 이메일을 아이디로 회원가입과 로그인 처리.
 - 마이페이지: 프로필 수정 기능(닉네임 변경, 프로필 사진 변경)
+
+
 
 
 ## 페이지 별 스크린샷
