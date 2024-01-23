@@ -7,12 +7,16 @@ import useMutation from "@/libs/client/useMutation";
 import { useEffect, useState } from "react";
 import { Item } from "@prisma/client";
 import { useRouter } from "next/router";
+import CategoryInput from "@/components/categories/CategoryInput";
+import categoryList from "@/components/categories/Categories";
+import imageUploader from "../helpers/imageUploader";
 
 interface UploadProductForm {
   name: string;
   price: number;
   description: string;
   image: FileList;
+  category: string;
 }
 
 interface UploadProductMutation {
@@ -22,39 +26,25 @@ interface UploadProductMutation {
 
 export default function ItemUpload() {
   const router = useRouter();
-  const { register, handleSubmit, watch } = useForm<UploadProductForm>();
-  const [uploadItem, { loading, data }] = useMutation<UploadProductMutation>("/api/products");
+  const { register, handleSubmit, watch, setValue } = useForm<UploadProductForm>({
+    defaultValues: {
+      category: "기타",
+    },
+  });
 
-  const imageUploader = async (file: any) => {
-    const formData = new FormData();
-    formData.append("file", file);
-    formData.append("upload_preset", "fff1cvhg");
+  const category = watch("category");
 
-    try {
-      const response = await fetch(`https://api.cloudinary.com/v1_1/dcmxpsjbw/image/upload`, {
-        method: "POST",
-        body: formData,
-      });
-
-      if (!response.ok) {
-        throw new Error(`Image upload failed with status: ${response.status}`);
-      }
-      const data = await response.json();
-      return data.url;
-    } catch (error) {
-      console.error("Error uploading image", error);
-    }
-  };
+  const [uploadItem, { loading, data }] = useMutation<UploadProductMutation>("/api/products/upload");
 
   const onValid = async (formData: UploadProductForm) => {
-    const { image, name, price, description } = formData;
+    const { image, name, price, description, category } = formData;
 
     try {
       if (image) {
         const imageUrl = await imageUploader(image[0]);
-        uploadItem({ imageUrl, name, price, description });
+        uploadItem({ imageUrl, name, price, description, category });
       } else {
-        uploadItem({ name, price, description });
+        uploadItem({ name, price, description, category });
       }
     } catch (error) {
       console.log(error);
@@ -70,6 +60,7 @@ export default function ItemUpload() {
   // 상품 사진 미리보기
   const [itemPreview, setItemPreview] = useState<string | undefined>(undefined);
   const itemImage = watch("image");
+
   useEffect(() => {
     if (itemImage && itemImage.length > 0) {
       const file = itemImage[0];
@@ -80,7 +71,7 @@ export default function ItemUpload() {
   // imageUploader 함수의 url 반환값을 넣어줘도 될듯.
 
   return (
-    <Layout title="상품 올리기">
+    <Layout canGoBack title="상품 올리기">
       <form onSubmit={handleSubmit(onValid)} className="p-4 space-y-4">
         <div>
           {itemImage ? (
@@ -111,6 +102,21 @@ export default function ItemUpload() {
           name="price"
           required
         />
+        {/* 카테고리 */}
+        <div className="grid grid-cols-2 gap-4">
+          {categoryList.map((item) => (
+            <div key={item.label} className="col-span-1">
+              <CategoryInput
+                onClick={(category: any) => setValue("category", category)}
+                selected={category === item.path}
+                label={item.label}
+                path={item.path}
+                icon={item.icon}
+              />
+            </div>
+          ))}
+        </div>
+
         <TextArea
           register={register("description", { required: true })}
           name="description"

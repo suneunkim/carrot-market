@@ -14,12 +14,16 @@ interface LayoutProps {
 
 export default function Layout({ title, canGoBack, hasTabBar, children, streamBack, seoTitle }: LayoutProps) {
   const router = useRouter();
+
   const onClick = () => {
-    router.back();
-  };
-  // 라이브 stream 업로드하고 뒤로가기 누르면 다시 업로드 화면으로 가는거 방지.
-  const onClickStreamBack = () => {
-    router.push("/streams");
+    const cureentPath = router.pathname;
+    if (cureentPath.includes("streams")) {
+      router.push("/streams");
+    }
+    if (cureentPath.includes("community")) {
+      router.push("/community");
+    } else router.back();
+    // 업로드하고 뒤로가기 시 다시 업로드 화면으로 가는거 방지.
   };
 
   return (
@@ -27,22 +31,9 @@ export default function Layout({ title, canGoBack, hasTabBar, children, streamBa
       <Head>
         <title>{seoTitle ? `${seoTitle} | Carrot Market` : "Carrot Market"}</title>
       </Head>
-      <div className="bg-white h-14 w-full max-w-xl justify-center text-lg font-medium py-3 fixed text-gray-800 border-b top-0 flex items-center px-10">
+      <div className="bg-white h-14 w-full max-w-xl justify-center text-lg font-medium py-3 fixed text-gray-800 border-b top-0 flex items-center px-10 z-10">
         {canGoBack ? (
           <button onClick={onClick} className="absolute left-4">
-            <svg
-              className="w-6 h-6"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7"></path>
-            </svg>
-          </button>
-        ) : null}
-        {streamBack ? (
-          <button onClick={onClickStreamBack} className="absolute left-4">
             <svg
               className="w-6 h-6"
               fill="none"

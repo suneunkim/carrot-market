@@ -1,19 +1,27 @@
 import Link from "next/link";
 import Heart from "./elements/Heart";
 import Comments from "./elements/Comments";
+import Image from "next/image";
 
 interface ItemProps {
   title: string;
   id: number;
   price: number | string;
   hearts: number;
+  imageUri?: string;
 }
 
-export default function HomeItem({ title, id, price, hearts }: ItemProps) {
+export default function HomeItem({ title, id, price, hearts, imageUri }: ItemProps) {
   return (
     <Link className="mb-5" href={`/products/${id}`}>
       <section className="px-3 pb-3 space-y-2 cursor-pointer">
-        <div className="w-full h-52 bg-gray-300 rounded-md" />
+        <div className="w-full aspect-square rounded-lg overflow-hidden relative">
+          {imageUri ? (
+            <Image priority={false} layout="fill" alt="상품 이미지" src={imageUri} />
+          ) : (
+            <div className="w-full aspect-square rounded-lg bg-gray-300 " />
+          )}
+        </div>
 
         <div className="flex justify-between">
           <div className="flex flex-col">

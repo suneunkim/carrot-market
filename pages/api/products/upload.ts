@@ -5,32 +5,30 @@ import { withApiSession } from "@/libs/server/withSession";
 
 async function handler(req: NextApiRequest, res: NextApiResponse<ResponseType>) {
   const {
-    query: { id },
-    body,
+    body: { name, price, description, imageUrl, category },
     session: { user },
   } = req;
 
-  // const message = await client.message.create({
-  //   data: {
-  //     message: body.message,
-  //     stream: {
-  //       connect: {
-  //         id: Number(id),
-  //       },
-  //     },
-  //     user: {
-  //       connect: {
-  //         id: user?.id,
-  //       },
-  //     },
-  //   },
-  // });
-
-  // res.json({
-  //   ok: true,
-  //   message,
-  // });
+  const product = await client.item.create({
+    data: {
+      name,
+      price: +price,
+      description,
+      image: imageUrl ? imageUrl : "",
+      category,
+      user: {
+        connect: {
+          id: user?.id,
+        },
+      },
+    },
+  });
+  res.json({
+    ok: true,
+    product,
+  });
 }
+
 export default withApiSession(
   withHandler({
     methods: ["POST"],
